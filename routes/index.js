@@ -16,12 +16,12 @@ router.get("/notes", (req, res) =>
  );
 
 router.get("/api/notes", (req, res) => {
-    fs.readFile("../db/db.json", "utf8", (error, data) => {
+    fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (error, data) => {
         if (error) {
             throw new Error(error);
             
         }
-         return res.json(data);
+         return res.json(JSON.parse(data));
         
 
     })
@@ -30,14 +30,14 @@ router.get("/api/notes", (req, res) => {
 
  //posts new data (notes) into the database JSON, as well as giving it a new ID per note
  router.post("/api/notes", (req, res) => {
-    fs.readFile("../db/db.json", "utf8", (error, data) => {
+    fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (error, data) => {
         const notes = JSON.parse(data);
         const newNotes = req.body;
         newNotes.id = uniqid();
 
         notes.push(newNotes);
-        fs.writeFile('../db/db.json', JSON.stringify(notes), (error, data) => {
-            res.json(newNotes);
+        fs.writeFile(path.join(__dirname, '../db/db.json'), JSON.stringify(notes), (error, data) => {
+            res.json(notes);
         });
 
     });
